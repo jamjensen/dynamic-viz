@@ -24,7 +24,7 @@ function myVis(data) {
 }
 
 
-d3.csv("/data/crashes_clean.csv").then(function(data) {
+d3.csv("/data/tst_clean.csv").then(function(data) {
   var grid = d3.select("body")
     .append("div")
     .attr("id", "grid")

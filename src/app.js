@@ -26,16 +26,16 @@ import './stylesheets/main.css';
 // });
 
 
-domReady(() => {
-  // this is just one example of how to import data. there are lots of ways to do it!
-  csv('./data/tst_clean.csv')
-  // .then(data => console.log(data))
-  .then(data => makeGrid(data))
-    .catch(e => {
-      console.log(e);
-      console.log('YOOOO')
-    });
-});
+// domReady(() => {
+//   // this is just one example of how to import data. there are lots of ways to do it!
+//   csv('./data/tst_clean.csv')
+//   // .then(data => console.log(data))
+//   .then(data => makeGrid(data))
+//     .catch(e => {
+//       console.log(e);
+//       console.log('YOOOO')
+//     });
+// });
 
 
 function makeGrid(data) {
@@ -56,6 +56,10 @@ function makeGrid(data) {
 
   ;
 }
+d3.csv("./data/tst_clean.csv")
+  .then(data => makeGrid(data))
+  .catch(e => {console.log(e);
+  });
 
 // d3.csv("/data/tst_clean.csv").then(function(data) {
 //   console.log(data);

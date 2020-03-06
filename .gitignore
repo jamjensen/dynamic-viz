@@ -1,3 +1,5 @@
 .DS_Store
 node_modules/
 data/*.json
+__pycache__
+data/bike-paths.geojson

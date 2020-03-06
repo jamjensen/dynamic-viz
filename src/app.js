@@ -40,6 +40,8 @@ setTimeout(() => {
   }
   makeGrid(getLength(4000), colorFunc)
 }, 500)
+
+
 // UNDO THIS COMMMENT
 // csv("./data/cyclist-binary.csv")
 //   .then(data => makeGrid(data))

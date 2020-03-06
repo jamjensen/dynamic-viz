@@ -7,23 +7,41 @@ from shapely.geometry import shape, Point
 
 def make_df():
 
-    df = pd.read_csv('data/crashes_2019.csv')
-    df.columns = df.columns.str.replace(' ', '_')
-    df.to_csv('data/crashes_clean.csv')
-    tst = df.head(20)
-    tst.to_csv('data/tst_clean.csv')
-    print('done')
+    # df = pd.read_csv('data/crashes_2019.csv')
+    # df.columns = df.columns.str.replace(' ', '_')
+    # df.to_csv('data/crashes_clean.csv')
+    # tst = df.head(20)
+    # tst.to_csv('data/tst_clean.csv')
+    # print('done')
+    df = pd.read_csv('data/crashes_clean.csv', index_col=0)
     df[(df['NUMBER_OF_CYCLIST_KILLED'] >=1) | (df['NUMBER_OF_CYCLIST_INJURED'] >=1)]\
         [['NUMBER_OF_PEDESTRIANS_INJURED','NUMBER_OF_PEDESTRIANS_KILLED',\
         'NUMBER_OF_CYCLIST_INJURED','NUMBER_OF_CYCLIST_KILLED']].to_csv('cyclist-binary.csv')
 
     df = df[(df['NUMBER_OF_CYCLIST_KILLED'] >=1) | (df['NUMBER_OF_CYCLIST_INJURED'] >=1)].reset_index()
-    df.drop(columns='index',inplace=True) 
-    df = df[~df['LATITUDE'].isnull()] 
+    df.drop(columns='index',inplace=True)
+    df = df[~df['LATITUDE'].isnull()]
     df = df[df['LONGITUDE'] < 0]
     df['geometry'] = df.apply(lambda x: Point(x['LONGITUDE'],x['LATITUDE']), axis=1)
-    geo_df = gpd.GeoDataFrame(df) 
+    df.reset_index(inplace=True)
+    df.drop('index',axis=1,inplace=True)
+    geo_df = gpd.GeoDataFrame(df)
 
+    classes = pd.read_csv('bike_path_classes.csv')
+    df = pd.merge(df, classes, left_index=True, right_on='index',how='left').reset_index()
+    df.fillna('None',inplace=True)
+
+def make_agg_df():
+
+
+    total = df.shape[0]
+    on_path = df[df['type'] != 'None'].shape[0]
+    data = []
+    data.append(['total',total])
+    data.append(['on_path',on_path])
+
+    
+    agg_df = pd.DataFrame(data, columns=['column','value'])
 
 def make_gdf():
     bike_paths = gpd.read_file('bike-paths.geojson')

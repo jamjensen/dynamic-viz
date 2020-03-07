@@ -13,7 +13,6 @@ var grid = select("body")
   .attr("class", "grid")
 ;
 function makeGrid(data, colorFunction) {
-  console.log(data)
   var boxes = grid
     .selectAll(".boxes")
     .data(data);
@@ -27,19 +26,22 @@ function makeGrid(data, colorFunction) {
 }
 // transform agg into this 
 const boundariesExample = [
-{upperBound: 300, color: 'green'},
-{upperBound: 700, color: 'blue'},
-{upperBound: 1000, color: 'red'}
+  {upperBound: 300, color: 'green'},
+  {upperBound: 700, color: 'blue'},
+  {upperBound: 1000, color: 'red'},
+  {upperBound: 4000, color: 'gray'},
 ]
-setTimeout(() => {
-  // makeGrid(getLength(1000), (d, idx) => idx % 2 ? 'blue' : 'red')
-  const colorFunc = (d, idx) => {
-    return boundariesExample.find(boundary => {
+
+const colorFuncGenerator = boundaries => {
+  return (d, idx) => {
+    return boundaries.find(boundary => {
       return idx < boundary.upperBound;
     }).color
   }
-  makeGrid(getLength(4000), colorFunc)
-}, 500)
+}
+
+const lenArray = getLength(4000);
+makeGrid(lenArray, colorFuncGenerator(boundariesExample));
 
 
 // UNDO THIS COMMMENT
@@ -54,11 +56,38 @@ setTimeout(() => {
 const state = {slideIdx: 0};
 const buttons = select('.buttons-container')
     .selectAll('button')
-    .data([0, 1, 2])
+    .data([
+      {
+        text: 'button 1',
+        bounds: [
+          {upperBound: 300, color: '#DD7500'},
+          // {upperBound: 700, color: 'blue'},
+          {upperBound: 4000, color: '#003F87'}
+        ]
+      },
+      {
+        text: 'button 2',
+        bounds: [
+          {upperBound: 500, color: 'green'},
+          {upperBound: 900, color: 'blue'},
+          {upperBound: 1200, color: 'red'}
+        ]
+      },
+      {
+        text: 'button 3',
+        bounds: [
+          {upperBound: 300, color: 'green'},
+          {upperBound: 700, color: 'blue'},
+          {upperBound: 4000, color: 'red'}
+        ]
+      }
+    ])
     .enter()
     .append('button')
-    .text(d => d)
-    ;
+    .text(d => d.text)
+    .on('click', d => {
+      makeGrid(lenArray, colorFuncGenerator(d.bounds));
+    });
 
 buttons
 

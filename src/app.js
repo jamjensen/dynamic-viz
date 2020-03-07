@@ -61,7 +61,7 @@ const buttons = select('.buttons-container')
         text: 'button 1',
         bounds: [
           {upperBound: 300, color: '#DD7500'},
-          // {upperBound: 700, color: 'blue'},
+          {upperBound: 700, color: 'blue'},
           {upperBound: 4000, color: '#003F87'}
         ]
       },

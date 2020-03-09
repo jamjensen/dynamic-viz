@@ -41,6 +41,12 @@ h1 {
    position: relative;
 }
 
+.annotation-group {
+  color: #808080;
+  font: Century Gothic, sans-serif;
+  /*font-family: 'highway gothic'*/
+}
+
 /*.boxContent {
    text-align: center;
    position: absolute;

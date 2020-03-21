@@ -14,7 +14,29 @@ var grid = select("body")
   .attr("class", "grid")
 ;
 
-function makeGrid(data, colorFunction, legendFunc) {
+var currentColors = [{color: 'orange', name: 'type 1'}]
+
+function legend(currentColors) {
+    const legend = d3.select('#legend-container');
+    console.log(currentColors.length)
+    for (var i = 0; i < 5; i++) {
+      d3.select('#legend-container *').remove();  
+    }
+    // d3.select('#legend-container *').remove();
+    const join = legend.selectAll('.legend-row').data(currentColors);
+    const rows = join.enter()
+    .append('div')
+    .attr('class', 'legend-row')
+
+    // text
+    rows.append('div')
+        .text(d => d.name)
+        .style('color', d => d.color)
+}
+
+
+
+function makeGrid(data, colorFunction) {
   var boxes = grid
     .selectAll(".boxes")
     .data(data);
@@ -25,23 +47,16 @@ function makeGrid(data, colorFunction, legendFunc) {
     .merge(boxes)
     .style("background-color", colorFunction)
   ;
-  legendFunc
+
+  // legend(currentColors)
 
   // annotate;
 }
 // transform agg into this 
-const boundariesExample = [
-  {upperBound: 300, color: 'green'},
-  {upperBound: 700, color: 'blue'},
-  {upperBound: 1000, color: 'red'},
-  {upperBound: 4000, color: 'gray'},
+const initial = [
+  {upperBound: 4000, color: 'gray'}
 ]
 
-// const makeAnnotation = annotation  => {
-//   d3.annotate()
-//   .type(d3.annotationLabel)
-//   .annotations(annotations)
-// }
 
 const colorFuncGenerator = boundaries => {
   return (d, idx) => {
@@ -51,51 +66,53 @@ const colorFuncGenerator = boundaries => {
   }
 }
 
-function legendFunc(data) {
-  var test = select('.legend-container')
-      .selectAll('legend')
-      .data(data);
-    test
-      .enter()
-      .append('legend')
-      .text(d => d)
-      ;
-    }
+// function legendFunc(data) {
+//       select('.legend-container')
+//       .selectAll('legend')
+//       .data(data)
+//       .enter()
+//       .append('legend')
+//       .text(d => d.text)
+//       ;
+//     }
 
-// const annotations = [{
-//   note: { label: "HiIIIIIIIIIIIIIIIIIIIIIIIIIII"},
-//   x: 100, y: 100,
-//   dy: 137, dx: 162,
-//   subject: { radius: 50, radiusPadding: 10 }
-// }]
+// function legendFunc() {
+//   console.log('hey')
+// }
 
 const lenArray = getLength(4000);
 
 
 // makeGrid(lenArray, colorFuncGenerator(boundariesExample), annotate(tst));
-makeGrid(lenArray, colorFuncGenerator(boundariesExample));
+makeGrid(lenArray, colorFuncGenerator(initial));
+// legend('initialAnnotation')
 
 const state = {slideIdx: 0};
 const buttons = select('.buttons-container')
     .selectAll('button')
     .data([
       {
+        text: 'Start',
+        bounds: [{upperBound: 4000, color: 'gray'}],
+        currentColors: [{color: 'gray', name: 'There are over 4,000 accidents involving a car and a cyclist each year in NYC.'}]
+      },
+      {
         text: 'Slide 1',
         bounds: [
           {upperBound: 300, color: '#DD7500'},
-          {upperBound: 700, color: 'blue'},
-          {upperBound: 4000, color: '#003F87'}
+          {upperBound: 700, color: '#AF1E2D'},
+          {upperBound: 4000, color: '#E0AA0F'}
         ],
-        annotation: 'test1'
+        currentColors: [{color: '#DD7500', name: 'type 1'}, {color:'#AF1E2D', name:'type1b'}, {color:'#E0AA0F', name:'type3' }]
       },
       {
         text: 'Slide 2',
         bounds: [
-          {upperBound: 500, color: 'green'},
-          {upperBound: 900, color: 'blue'},
-          {upperBound: 1200, color: 'red'}
+          {upperBound: 500, color: 'green', name: 'what'},
+          {upperBound: 900, color: 'blue', name: 'the'},
+          {upperBound: 4000, color: 'red', name: 'eff'}
         ],
-        annotation: 'test2'
+        currentColors: [{color: '#DD7500', name: 'type 1'}, {color:'#AF1E2D', name:'type1b'}, {color:'#E0AA0F', name:'type3' }]
       },
       {
         text: 'Slide 3',
@@ -104,45 +121,35 @@ const buttons = select('.buttons-container')
           {upperBound: 700, color: 'blue'},
           {upperBound: 4000, color: 'red'}
         ],
-        annotation: 'test3'
+        currentColors: [{color: '#DD7500', name: 'type 1'}, {color:'#AF1E2D', name:'type1b'}, {color:'#E0AA0F', name:'type3' }]
       }
     ])
     .enter()
     .append('button')
     .text(d => d.text)
     .on('click', d => {
-      makeGrid(lenArray, colorFuncGenerator(d.bounds), legendFunc(d.text));
+      makeGrid(lenArray, colorFuncGenerator(d.bounds));
+      // legend(d.annotation);
+      legend(d.currentColors)
     });
 
 buttons
 
-var test = select('.legend-container')
-  .selectAll('legend')
-  .data([{
-    text: 'slide1'
-  },
-  {
-    text: 'slide2'
-  }])
-  .enter()
-  .append('legend')
-  .text(d => d.text)
-
-// test
+// var test = select('.legend-container')
+//   .selectAll('legend')
+//   .data([{
+//     text: 'slide1'
+//   },
+//   {
+//     text: 'slide2'
+//   }])
+//   .enter()
+//   .append('legend')
+//   .text(d => d.text)
 
 
 
-// domReady(() => {
-//   Promise.all([
-//     csv('./data/cyclist-binary.csv')
-//   ]).then(d => {
-//     const [data] = d;
-//     console.log(data.length)
-//     // app(data, article);
-//   });
-// });
 
-// var length = 5; // user defined length
 
 function getLength(length) {
   var loop = [];

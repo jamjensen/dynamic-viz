@@ -69,6 +69,14 @@ h2 {
   width: 100%;
 }
 
+.footer {
+  display: flex;
+}
+
+a{
+  font-size: 12px;
+}
+
 #app {
   padding: 50px 100px;
 }

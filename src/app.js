@@ -1,6 +1,4 @@
-// if the data you are going to import is small, then you can import it using es6 import
-// import MY_DATA from './app/data/example.json'
-// (I tend to think it's best to use screaming snake case for imported json)
+
 const domReady = require('domready');
 import {csv} from 'd3-fetch';
 import {select} from 'd3-selection';
@@ -18,17 +16,14 @@ var currentColors = [{color: 'orange', name: 'type 1'}]
 
 function legend(currentColors) {
     const legend = d3.select('#legend-container');
-    console.log(currentColors.length)
     for (var i = 0; i < 5; i++) {
       d3.select('#legend-container *').remove();  
     }
-    // d3.select('#legend-container *').remove();
     const join = legend.selectAll('.legend-row').data(currentColors);
     const rows = join.enter()
     .append('div')
     .attr('class', 'legend-row')
 
-    // text
     rows.append('div')
         .text(d => d.name)
         .style('color', d => d.color)
@@ -47,16 +42,12 @@ function makeGrid(data, colorFunction) {
     .merge(boxes)
     .style("background-color", colorFunction)
   ;
-
-  // legend(currentColors)
-
-  // annotate;
 }
-// transform agg into this 
+
+
 const initial = [
   {upperBound: 4000, color: 'gray'}
 ]
-
 
 const colorFuncGenerator = boundaries => {
   return (d, idx) => {
@@ -66,62 +57,53 @@ const colorFuncGenerator = boundaries => {
   }
 }
 
-// function legendFunc(data) {
-//       select('.legend-container')
-//       .selectAll('legend')
-//       .data(data)
-//       .enter()
-//       .append('legend')
-//       .text(d => d.text)
-//       ;
-//     }
-
-// function legendFunc() {
-//   console.log('hey')
-// }
 
 const lenArray = getLength(4000);
 
-
-// makeGrid(lenArray, colorFuncGenerator(boundariesExample), annotate(tst));
 makeGrid(lenArray, colorFuncGenerator(initial));
-// legend('initialAnnotation')
 
 const state = {slideIdx: 0};
+
 const buttons = select('.buttons-container')
     .selectAll('button')
     .data([
       {
         text: 'Start',
-        bounds: [{upperBound: 4000, color: 'gray'}],
-        currentColors: [{color: 'gray', name: 'There are over 4,000 accidents involving a car and a cyclist each year in NYC.'}]
+        bounds: [{upperBound: 4289, color: 'gray'}],
+        currentColors: [{color: 'gray', name: 'There were 4,289 accidents involving a car and a cyclist in NYC in 2019.'}]
       },
       {
-        text: 'Slide 1',
+        text: 'On a Bike Lane?',
         bounds: [
-          {upperBound: 300, color: '#DD7500'},
-          {upperBound: 700, color: '#AF1E2D'},
-          {upperBound: 4000, color: '#E0AA0F'}
+          {upperBound: 1914, color: '#DD7500'},
+          {upperBound: 4289, color: '#AF1E2D'}
         ],
-        currentColors: [{color: '#DD7500', name: 'type 1'}, {color:'#AF1E2D', name:'type1b'}, {color:'#E0AA0F', name:'type3' }]
+        currentColors: [{color: '#DD7500', name: 'Cyclist on Any Type of Bike Path: 1,914 accidents'},
+                       {color:'#AF1E2D', name:'Cyclist on Street Without a Bike Path: 2,375 accidents'}]
       },
       {
-        text: 'Slide 2',
+        text: 'What Type of Bike Lane?',
         bounds: [
-          {upperBound: 500, color: 'green', name: 'what'},
-          {upperBound: 900, color: 'blue', name: 'the'},
-          {upperBound: 4000, color: 'red', name: 'eff'}
+          {upperBound: 484, color: '#11605b'},
+          {upperBound: 1391, color: '#0571b0'},
+          {upperBound: 1914, color: '#E2D6B6'},
+          {upperBound: 4289, color: '#AF1E2D'}
         ],
-        currentColors: [{color: '#DD7500', name: 'type 1'}, {color:'#AF1E2D', name:'type1b'}, {color:'#E0AA0F', name:'type3' }]
+        currentColors: [{color: '#11605b', name: 'Fully Protected Path: 484 accidents'}, {color:'#0571b0', name:'Partially Protected: 907 accidents'},
+                       {color:'#E2D6B6', name:'Unprotected / Fully Shared Bike Path: 523 accidents'}, {color: '#AF1E2D', name:'Without a Bike Path: 2,375 accidents'}]
       },
       {
-        text: 'Slide 3',
+        text: 'By Borough',
         bounds: [
-          {upperBound: 300, color: 'green'},
-          {upperBound: 700, color: 'blue'},
-          {upperBound: 4000, color: 'red'}
+          {upperBound: 82, color: '#e41a1c'},
+          {upperBound: 444, color: '#377eb8'},
+          {upperBound: 1248, color: '#4daf4a'},
+          {upperBound: 2098, color: '#984ea3'},
+          {upperBound: 4289, color: '#ff7f00'}
         ],
-        currentColors: [{color: '#DD7500', name: 'type 1'}, {color:'#AF1E2D', name:'type1b'}, {color:'#E0AA0F', name:'type3' }]
+        currentColors: [{color: '#e41a1c', name: 'Staten Island: 82 accidents'}, {color:'#377eb8', name:'Bronx: 362 accidents'},
+                       {color:'#4daf4a', name:'Queens: 804 accidents' }, {color: '#984ea3', name: 'Manhattan: 850 accidents'},
+                       {color:'#ff7f00', name:'Brooklyn: 2,191 accidents'},]
       }
     ])
     .enter()
@@ -129,25 +111,10 @@ const buttons = select('.buttons-container')
     .text(d => d.text)
     .on('click', d => {
       makeGrid(lenArray, colorFuncGenerator(d.bounds));
-      // legend(d.annotation);
       legend(d.currentColors)
     });
 
 buttons
-
-// var test = select('.legend-container')
-//   .selectAll('legend')
-//   .data([{
-//     text: 'slide1'
-//   },
-//   {
-//     text: 'slide2'
-//   }])
-//   .enter()
-//   .append('legend')
-//   .text(d => d.text)
-
-
 
 
 

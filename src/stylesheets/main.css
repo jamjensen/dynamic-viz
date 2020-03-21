@@ -13,13 +13,18 @@ body {
  /*323232 */
 }
 
-/*body, a {
-  color: #808080;
-}*/
+
 
 h1 {
   color: #808080;
   font: Century Gothic, sans-serif;
+  /*font-family: 'highway gothic'*/
+}
+
+h2 {
+  color: #808080;
+  font: Century Gothic, sans-serif;
+  font-size: 14px;
   /*font-family: 'highway gothic'*/
 }
 
@@ -47,29 +52,6 @@ h1 {
   /*font-family: 'highway gothic'*/
 }
 
-/*#legend-container {
-  border: 1px solid #fff;
-  width: 900px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-}
-*/
-/*.legend {
-  width: 900px;
-  display: flex;
-  justify-content: space-around;
-
-}*/
-/*.box h2 { 
-   display: inline-block;
-   background-color:rgba(28,28,28,1); 
-   font-size: 60%;
-   line-height: auto;
-   color:rgba(210,210,210,1); 
-   padding: 3px 8px 3px 8px;
-}
-*/
 .flex {
   display: flex;
 }

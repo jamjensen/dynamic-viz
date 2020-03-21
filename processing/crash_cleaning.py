@@ -16,7 +16,7 @@ def make_df():
     df = pd.read_csv('data/crashes_clean.csv', index_col=0)
     df[(df['NUMBER_OF_CYCLIST_KILLED'] >=1) | (df['NUMBER_OF_CYCLIST_INJURED'] >=1)]\
         [['NUMBER_OF_PEDESTRIANS_INJURED','NUMBER_OF_PEDESTRIANS_KILLED',\
-        'NUMBER_OF_CYCLIST_INJURED','NUMBER_OF_CYCLIST_KILLED']].to_csv('cyclist-binary.csv')
+        'NUMBER_OF_CYCLIST_INJURED','NUMBER_OF_CYCLIST_KILLED','BOROUGH','CONTRIBUTING_FACTOR_VEHICLE_1']].to_csv('cyclist-binary.csv')
 
     df = df[(df['NUMBER_OF_CYCLIST_KILLED'] >=1) | (df['NUMBER_OF_CYCLIST_INJURED'] >=1)].reset_index()
     df.drop(columns='index',inplace=True)

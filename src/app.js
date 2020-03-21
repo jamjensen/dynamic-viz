@@ -13,7 +13,8 @@ var grid = select("body")
   .attr("id", "grid")
   .attr("class", "grid")
 ;
-function makeGrid(data, colorFunction, annotate) {
+
+function makeGrid(data, colorFunction, legendFunc) {
   var boxes = grid
     .selectAll(".boxes")
     .data(data);
@@ -24,8 +25,9 @@ function makeGrid(data, colorFunction, annotate) {
     .merge(boxes)
     .style("background-color", colorFunction)
   ;
+  legendFunc
 
-  annotate;
+  // annotate;
 }
 // transform agg into this 
 const boundariesExample = [
@@ -49,6 +51,17 @@ const colorFuncGenerator = boundaries => {
   }
 }
 
+function legendFunc(data) {
+  var test = select('.legend-container')
+      .selectAll('legend')
+      .data(data);
+    test
+      .enter()
+      .append('legend')
+      .text(d => d)
+      ;
+    }
+
 // const annotations = [{
 //   note: { label: "HiIIIIIIIIIIIIIIIIIIIIIIIIIII"},
 //   x: 100, y: 100,
@@ -59,82 +72,65 @@ const colorFuncGenerator = boundaries => {
 const lenArray = getLength(4000);
 
 
-const annotate = annotate_dict => {
-  grid.append("text")
-        .attr("x", (30))             
-        .attr("y", 0 - (22))
-        .attr("text-anchor", "middle")  
-        .style("font-size", "50px") 
-        .style("text-decoration", "underline")  
-        .text(annotate_dict.note.label);  
-}
-
-
-
-// makeGrid(getLength(4000), d => 'red')
-// const tst = {
-//             id: "bitcoin-cash-fork",
-//             // If you don't provide a custom "type" attribute in your options dictionary, , 
-//             // the default type in the getAnnotations function will be used.
-//             note: {
-//                 label: "Bitcoin splits into Bitcoins and Bitcoin Cash",
-//                 title: "08-01-2017"
-//             },
-//             dx: -15, 
-//             dy: -57 
-//         }
-
-makeGrid(lenArray, colorFuncGenerator(boundariesExample), annotate(tst));
-
+// makeGrid(lenArray, colorFuncGenerator(boundariesExample), annotate(tst));
+makeGrid(lenArray, colorFuncGenerator(boundariesExample));
 
 const state = {slideIdx: 0};
 const buttons = select('.buttons-container')
     .selectAll('button')
     .data([
       {
-        text: 'button 1',
+        text: 'Slide 1',
         bounds: [
           {upperBound: 300, color: '#DD7500'},
           {upperBound: 700, color: 'blue'},
           {upperBound: 4000, color: '#003F87'}
         ],
-        annotation: {
-            id: "bitcoin-cash-fork",
-            // If you don't provide a custom "type" attribute in your options dictionary, , 
-            // the default type in the getAnnotations function will be used.
-            note: {
-                label: "Bitcoin splits into Bitcoins and Bitcoin Cash",
-                title: "08-01-2017"
-            },
-            dx: -15, 
-            dy: -57, 
-        }
+        annotation: 'test1'
       },
       {
-        text: 'button 2',
+        text: 'Slide 2',
         bounds: [
           {upperBound: 500, color: 'green'},
           {upperBound: 900, color: 'blue'},
           {upperBound: 1200, color: 'red'}
-        ]
+        ],
+        annotation: 'test2'
       },
       {
-        text: 'button 3',
+        text: 'Slide 3',
         bounds: [
           {upperBound: 300, color: 'green'},
           {upperBound: 700, color: 'blue'},
           {upperBound: 4000, color: 'red'}
-        ]
+        ],
+        annotation: 'test3'
       }
     ])
     .enter()
     .append('button')
     .text(d => d.text)
     .on('click', d => {
-      makeGrid(lenArray, colorFuncGenerator(d.bounds), annotate(d.annotation)); 
+      makeGrid(lenArray, colorFuncGenerator(d.bounds), legendFunc(d.text));
     });
 
 buttons
+
+var test = select('.legend-container')
+  .selectAll('legend')
+  .data([{
+    text: 'slide1'
+  },
+  {
+    text: 'slide2'
+  }])
+  .enter()
+  .append('legend')
+  .text(d => d.text)
+
+// test
+
+
 
 // domReady(() => {
 //   Promise.all([
@@ -156,17 +152,7 @@ function getLength(length) {
   }
   return loop
 }
-var loop = getLength(10)
-console.log(loop)
 
 
-csv("./data/tst_clean.csv")
-  .then(data => console.log(data[0]["CRASH_DATE"]))
-  .catch(e => {console.log(e);
-  });
 
-// console.log(loop)
-// console.log([0,1,2].length)
-
-console.log(tst)
 
